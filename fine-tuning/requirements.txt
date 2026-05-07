@@ -7,12 +7,12 @@
 # =============================================================================
 
 # Core: HuggingFace ecosystem
-torch>=2.1.0,<2.5.0
-transformers>=4.43.0,<5.0.0
-peft>=0.12.0,<1.0.0
-trl>=0.9.6,<1.0.0
-accelerate>=0.33.0,<2.0.0
-datasets>=2.20.0,<3.0.0
+torch>=2.1.0
+transformers>=4.43.0
+peft>=0.12.0
+trl>=0.9.6
+accelerate>=0.33.0
+datasets>=2.20.0
 
 # Quantization
 bitsandbytes>=0.43.0,<1.0.0
