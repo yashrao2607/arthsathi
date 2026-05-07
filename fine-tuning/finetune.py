@@ -368,8 +368,6 @@ def train(
         dataloader_pin_memory=training_config.get("dataloader_pin_memory", True),
 
         # SFT-specific
-        max_seq_length=model_config.get("max_seq_length", 2048),
-        dataset_text_field="text",
         packing=False,  # Don't pack — we want proper attention masks per sample
         neftune_noise_alpha=training_config.get("neftune_noise_alpha", None),
 
@@ -383,7 +381,9 @@ def train(
         args=sft_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        processing_class=tokenizer,
+        tokenizer=tokenizer,
+        max_seq_length=model_config.get("max_seq_length", 2048),
+        dataset_text_field="text",
     )
 
     # --- Print training summary ---
