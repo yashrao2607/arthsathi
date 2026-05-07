@@ -1,70 +1,42 @@
 # =============================================================================
 # ArthSathi (अर्थसाथी) Fine-Tuning Pipeline Configuration
 # =============================================================================
-# All hyperparameters, paths, and settings for the QLoRA fine-tuning pipeline
-# on Qwen3-4B for Indian financial advisory.
-# =============================================================================
-
-# ---------------------------------------------------------------------------
-# Model Configuration
-# ---------------------------------------------------------------------------
 model:
-  name: "Qwen/Qwen3-4B"               # HuggingFace model identifier
-  trust_remote_code: true               # Required for Qwen models
-  use_flash_attention: false            # Flash Attention 2 requires Ampere+ GPUs; Kaggle T4 is Turing
-  max_seq_length: 2048                  # Maximum sequence length for training
-  dtype: "float16"                      # Computation dtype (bfloat16 or float16)
+  name: "Qwen/Qwen3-4B"
+  trust_remote_code: true
+  use_flash_attention: false
+  max_seq_length: 2048
+  dtype: "float16"
 
-# ---------------------------------------------------------------------------
-# Dataset Configuration
-# ---------------------------------------------------------------------------
 dataset:
-  # Source datasets from HuggingFace
   sources:
     - name: "bharatgenai/FinanceParam"
       split: "train"
-      format: "financeparam"            # Custom parser for this dataset format
+      format: "financeparam"
     - name: "gbharti/finance-alpaca"
       split: "train"
-      format: "alpaca"                  # Standard Alpaca instruction format
-
-  # Output paths
-  output_dir: "./data"                  # Directory for processed JSONL files
+      format: "alpaca"
+  output_dir: "./data"
   train_file: "train.jsonl"
   val_file: "val.jsonl"
   test_file: "test.jsonl"
-
-  # Split ratios
   train_ratio: 0.90
   val_ratio: 0.05
   test_ratio: 0.05
-
-  # Data quality filters
-  min_instruction_length: 10            # Minimum characters in instruction
-  min_output_length: 20                 # Minimum characters in output
-  max_instruction_length: 1024          # Maximum characters in instruction
-  max_output_length: 2048               # Maximum characters in output
-  deduplication_threshold: 0.85         # Jaccard similarity threshold for dedup
-
-  # System prompt appended to every sample
+  min_instruction_length: 10
+  min_output_length: 20
+  max_instruction_length: 1024
+  max_output_length: 2048
+  deduplication_threshold: 0.85
   system_prompt: |
     You are ArthSathi (अर्थसाथी), an expert Indian financial advisor AI. You provide accurate,
-    helpful, and regulation-compliant financial guidance for Indian users. You are knowledgeable
-    about Indian tax laws (old and new regimes), mutual funds (SIP, SWP, ELSS), insurance,
-    fixed deposits, PPF, NPS, RBI guidelines, and SEBI regulations. You respond clearly in
-    English or Hindi as appropriate. Always include relevant disclaimers that this is not
-    professional financial advice. Use Indian numbering conventions (lakhs, crores) and
-    INR currency. When discussing taxes, reference current assessment year and applicable
-    sections of the Income Tax Act.
+    helpful, and regulation-compliant financial guidance for Indian users.
 
-# ---------------------------------------------------------------------------
-# QLoRA / LoRA Configuration
-# ---------------------------------------------------------------------------
 lora:
-  rank: 64                              # LoRA rank (r)
-  alpha: 128                            # LoRA alpha (scaling factor)
-  dropout: 0.05                         # LoRA dropout probability
-  target_modules:                       # Modules to apply LoRA adapters
+  rank: 64
+  alpha: 128
+  dropout: 0.05
+  target_modules:
     - "q_proj"
     - "k_proj"
     - "v_proj"
@@ -72,197 +44,45 @@ lora:
     - "gate_proj"
     - "up_proj"
     - "down_proj"
-  bias: "none"                          # Bias handling: none, all, or lora_only
-  task_type: "CAUSAL_LM"               # Task type for PEFT
+  bias: "none"
+  task_type: "CAUSAL_LM"
 
-# ---------------------------------------------------------------------------
-# Quantization Configuration (4-bit QLoRA)
-# ---------------------------------------------------------------------------
 quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_compute_dtype: "float16"
+  bnb_4bit_use_double_quant: true
 
-# ---------------------------------------------------------------------------
-# Dataset Configuration
-# ---------------------------------------------------------------------------
-dataset:
-  # Source datasets from HuggingFace
-  sources:
-    - name: "bharatgenai/FinanceParam"
-      split: "train"
-      format: "financeparam"            # Custom parser for this dataset format
-    - name: "gbharti/finance-alpaca"
-      split: "train"
-      format: "alpaca"                  # Standard Alpaca instruction format
-
-  # Output paths
-  output_dir: "./data"                  # Directory for processed JSONL files
-  train_file: "train.jsonl"
-  val_file: "val.jsonl"
-  test_file: "test.jsonl"
-
-  # Split ratios
-  train_ratio: 0.90
-  val_ratio: 0.05
-  test_ratio: 0.05
-
-  # Data quality filters
-  min_instruction_length: 10            # Minimum characters in instruction
-  min_output_length: 20                 # Minimum characters in output
-  max_instruction_length: 1024          # Maximum characters in instruction
-  max_output_length: 2048               # Maximum characters in output
-  deduplication_threshold: 0.85         # Jaccard similarity threshold for dedup
-
-  # System prompt appended to every sample
-  system_prompt: |
-    You are ArthSathi (अर्थसाथी), an expert Indian financial advisor AI. You provide accurate,
-    helpful, and regulation-compliant financial guidance for Indian users. You are knowledgeable
-    about Indian tax laws (old and new regimes), mutual funds (SIP, SWP, ELSS), insurance,
-    fixed deposits, PPF, NPS, RBI guidelines, and SEBI regulations. You respond clearly in
-    English or Hindi as appropriate. Always include relevant disclaimers that this is not
-    professional financial advice. Use Indian numbering conventions (lakhs, crores) and
-    INR currency. When discussing taxes, reference current assessment year and applicable
-    sections of the Income Tax Act.
-
-# ---------------------------------------------------------------------------
-# QLoRA / LoRA Configuration
-# ---------------------------------------------------------------------------
-lora:
-  rank: 64                              # LoRA rank (r)
-  alpha: 128                            # LoRA alpha (scaling factor)
-  dropout: 0.05                         # LoRA dropout probability
-  target_modules:                       # Modules to apply LoRA adapters
-    - "q_proj"
-    - "k_proj"
-    - "v_proj"
-    - "o_proj"
-    - "gate_proj"
-    - "up_proj"
-    - "down_proj"
-  bias: "none"                          # Bias handling: none, all, or lora_only
-  task_type: "CAUSAL_LM"               # Task type for PEFT
-
-# ---------------------------------------------------------------------------
-# Quantization Configuration (4-bit QLoRA)
-# ---------------------------------------------------------------------------
-quantization:
-  load_in_4bit: true                    # Enable 4-bit quantization
-  bnb_4bit_quant_type: "nf4"           # Quantization type: nf4 or fp4
-  bnb_4bit_compute_dtype: "float16"    # Compute dtype during quantization
-  bnb_4bit_use_double_quant: true       # Double quantization for memory savings
-
-# ---------------------------------------------------------------------------
-# ---------------------------------------------------------------------------
 training:
-  output_dir: "./output"                # Directory for model output
-  checkpoint_dir: "./checkpoints"       # Directory for checkpoint saves
-
-  # Batch and gradient settings
-  per_device_train_batch_size: 2        # Reduced from 4 to 2 to prevent OOM
-  per_device_eval_batch_size: 2         # Reduced from 4 to 2
-  gradient_accumulation_steps: 16       # Increased from 8 to 16 to keep effective batch=64
-
-  # Learning rate schedule
-  learning_rate: 2.0e-4                 # Peak learning rate
-  lr_scheduler_type: "cosine"           # Scheduler: cosine, linear, constant
-  warmup_ratio: 0.1                     # Fraction of steps for warmup
-  weight_decay: 0.01                    # Weight decay for regularization
-
-
-  # Epochs and limits
-  num_train_epochs: 3                   # Total training epochs
-  max_steps: -1                         # Override epochs if > 0
-
-  # Precision and performance
-  fp16: true                            # Use fp16 (supported on Kaggle Tesla T4)
-  bf16: false                           # Use bf16 only on supported GPUs such as Ampere+
-  gradient_checkpointing: true          # Trade compute for memory savings
-  optim: "paged_adamw_8bit"            # Optimizer: paged for memory efficiency
-
-  # Logging
-  logging_steps: 25                     # Log every N steps
-  logging_dir: "./logs"                 # TensorBoard log directory
-  report_to: "tensorboard"              # Reporting: tensorboard, wandb, none
-
-  # Evaluation
-  eval_strategy: "steps"               # Evaluate by steps
-  eval_steps: 250                       # Evaluate every N steps
-  eval_accumulation_steps: 4            # Gradient accumulation during eval
-
-  # Saving
-  save_strategy: "steps"               # Save by steps
-  save_steps: 500                       # Save every N steps
-  save_total_limit: 3                   # Keep only last N checkpoints
-  load_best_model_at_end: true          # Load best checkpoint at end
-  metric_for_best_model: "eval_loss"   # Metric for best model selection
-  greater_is_better: false              # Lower loss is better
-
-  # Reproducibility
-  seed: 42                              # Random seed
-
-  # Miscellaneous
-  dataloader_num_workers: 4             # DataLoader workers
-  dataloader_pin_memory: true           # Pin memory for faster GPU transfer
-  remove_unused_columns: false          # Keep all columns for SFT
-  neftune_noise_alpha: 5               # NEFTune noise for improved quality
-
-# ---------------------------------------------------------------------------
-# Evaluation Configuration
-# ---------------------------------------------------------------------------
-evaluation:
-  model_path: "./output"                # Path to fine-tuned model (or adapter)
-  base_model: "Qwen/Qwen3-4B"          # Base model for comparison
-  test_file: "./data/test.jsonl"        # Test set for evaluation
-  results_dir: "./eval_results"         # Directory for evaluation results
-  max_new_tokens: 512                   # Max tokens for generation
-  temperature: 0.1                      # Low temperature for factual accuracy
-  top_p: 0.9                            # Nucleus sampling threshold
-  do_sample: true                       # Enable sampling
-  batch_size: 8                         # Evaluation batch size
-
-  # Metrics to compute
-  metrics:
-    - "accuracy"                        # Exact match / factual accuracy
-    - "bleu"                            # BLEU score
-    - "rouge_l"                         # ROUGE-L F1 score
-
-  # Language-specific evaluation
-  languages:
-    - "en"                              # English
-    - "hi"                              # Hindi
-
-# ---------------------------------------------------------------------------
-# ONNX Export Configuration
-# ---------------------------------------------------------------------------
-export:
-  adapter_path: "./output"              # Path to LoRA adapter
-  base_model: "Qwen/Qwen3-4B"          # Base model for merging
-  output_dir: "./export/onnx"           # ONNX model output directory
-  opset_version: 17                     # ONNX opset version
-
-  # Quantization settings for mobile deployment
-  quantization:
-    enabled: true                       # Apply quantization
-    format: "int8"                      # Quantization format: int8, uint8
-    per_channel: true                   # Per-channel quantization
-    weight_only: true                   # Quantize weights only (faster inference)
-
-  # Verification
-  verify_outputs: true                  # Verify ONNX vs PyTorch output match
-  atol: 1e-3                            # Absolute tolerance for verification
-  rtol: 1e-2                            # Relative tolerance for verification
-
-  # Mobile optimization
-  optimize_for_mobile: true             # Apply mobile-specific optimizations
-  use_dynamo_export: false              # Use torch dynamo exporter (experimental)
-
-# ---------------------------------------------------------------------------
-# Weights & Biases (Optional)
-# ---------------------------------------------------------------------------
-wandb:
-  enabled: false                        # Enable W&B logging
-  project: "arthsathi"                  # W&B project name
-  entity: ""                            # W&B entity (team/user)
-  tags:
-    - "qwen3-4b"
-    - "qlora"
-    - "finance"
-    - "indian"
+  output_dir: "./output"
+  checkpoint_dir: "./checkpoints"
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 16
+  learning_rate: 2.0e-4
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  num_train_epochs: 3
+  max_steps: -1
+  fp16: true
+  bf16: false
+  gradient_checkpointing: true
+  optim: "paged_adamw_8bit"
+  logging_steps: 25
+  logging_dir: "./logs"
+  report_to: "tensorboard"
+  eval_strategy: "steps"
+  eval_steps: 250
+  eval_accumulation_steps: 4
+  save_strategy: "steps"
+  save_steps: 500
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  seed: 42
+  dataloader_num_workers: 4
+  dataloader_pin_memory: true
+  remove_unused_columns: false
+  neftune_noise_alpha: 5
