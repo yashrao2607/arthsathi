@@ -381,7 +381,7 @@ def train(
         args=sft_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         max_seq_length=model_config.get("max_seq_length", 2048),
         dataset_text_field="text",
     )
