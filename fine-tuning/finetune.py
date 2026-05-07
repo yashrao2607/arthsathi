@@ -208,6 +208,12 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
     model.config.torch_dtype = compute_dtype
     model.config.use_cache = False  # Recommended for training
 
+    # --- Force all non-quantized layers to float16 (Essential for T4) ---
+    logger.info("  Casting all non-quantized layers to float16...")
+    for name, param in model.named_parameters():
+        if "4bit" not in str(param.dtype).lower():
+            param.data = param.data.to(torch.float16)
+
     # --- Load tokenizer ---
     tokenizer = AutoTokenizer.from_pretrained(
         model_config["name"],
