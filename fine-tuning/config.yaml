@@ -11,9 +11,9 @@
 model:
   name: "Qwen/Qwen3-4B"               # HuggingFace model identifier
   trust_remote_code: true               # Required for Qwen models
-  use_flash_attention: true             # Flash Attention 2 (Ampere+ GPUs)
+  use_flash_attention: false            # Flash Attention 2 requires Ampere+ GPUs; Kaggle T4 is Turing
   max_seq_length: 2048                  # Maximum sequence length for training
-  dtype: "bfloat16"                     # Computation dtype (bfloat16 or float16)
+  dtype: "float16"                      # Computation dtype (bfloat16 or float16)
 
 # ---------------------------------------------------------------------------
 # Dataset Configuration
@@ -81,7 +81,7 @@ lora:
 quantization:
   load_in_4bit: true                    # Enable 4-bit quantization
   bnb_4bit_quant_type: "nf4"           # Quantization type: nf4 or fp4
-  bnb_4bit_compute_dtype: "bfloat16"   # Compute dtype during quantization
+  bnb_4bit_compute_dtype: "float16"    # Compute dtype during quantization
   bnb_4bit_use_double_quant: true       # Double quantization for memory savings
 
 # ---------------------------------------------------------------------------
@@ -107,8 +107,8 @@ training:
   max_steps: -1                         # Override epochs if > 0
 
   # Precision and performance
-  fp16: false                           # Use fp16 (set false if bf16=true)
-  bf16: true                            # Use bf16 (recommended for Ampere+)
+  fp16: true                            # Use fp16 (supported on Kaggle Tesla T4)
+  bf16: false                           # Use bf16 only on supported GPUs such as Ampere+
   gradient_checkpointing: true          # Trade compute for memory savings
   optim: "paged_adamw_8bit"            # Optimizer: paged for memory efficiency
 
