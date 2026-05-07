@@ -163,8 +163,8 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
         "float16": torch.float16,
     }
     compute_dtype = compute_dtype_map.get(
-        quant_config.get("bnb_4bit_compute_dtype", "bfloat16"),
-        torch.bfloat16,
+        quant_config.get("bnb_4bit_compute_dtype", "float16"),
+        torch.float16,
     )
 
     bnb_config = BitsAndBytesConfig(
@@ -179,9 +179,13 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
     logger.info(f"  Compute dtype: {compute_dtype}")
 
     # --- Load model ---
+    # For multi-GPU (DDP), we need to map to the specific local rank
+    local_rank = int(os.environ.get("LOCAL_RANK", -1))
+    device_map = "auto" if local_rank == -1 else {"": local_rank}
+
     model_kwargs = {
         "quantization_config": bnb_config,
-        "device_map": "auto",
+        "device_map": device_map,
         "trust_remote_code": model_config.get("trust_remote_code", True),
     }
 
@@ -334,8 +338,8 @@ def train(
         max_steps=training_config.get("max_steps", -1),
 
         # Precision
-        fp16=training_config.get("fp16", False),
-        bf16=training_config.get("bf16", True),
+        fp16=training_config.get("fp16", True),
+        bf16=training_config.get("bf16", False),
 
         # Performance
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
