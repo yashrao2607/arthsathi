@@ -78,8 +78,9 @@ def train(model, tokenizer, train_dataset, val_dataset, config, compute_dtype):
     )
     model = get_peft_model(model, lora_config)
     
-    # NUCLEAR FIX: Force everything to float16 after LoRA is applied
-    logger.info("  Nuclear Casting: Forcing all parameters to float16...")
+    # NUCLEAR FIX: Force everything to float16 and DISABLE mixed precision flags
+    # This prevents the GradScaler from ever starting.
+    logger.info("  Total Eclipse: Forcing all parameters to float16 and disabling Scaler...")
     model.config.torch_dtype = compute_dtype
     for name, param in model.named_parameters():
         if "4bit" not in str(param.dtype).lower():
@@ -105,8 +106,8 @@ def train(model, tokenizer, train_dataset, val_dataset, config, compute_dtype):
         gradient_accumulation_steps=training_config["gradient_accumulation_steps"],
         learning_rate=float(training_config["learning_rate"]),
         num_train_epochs=training_config["num_train_epochs"],
-        fp16=True,
-        bf16=False,
+        fp16=False, # DISABLED to bypass GradScaler
+        bf16=False, # DISABLED
         logging_steps=training_config["logging_steps"],
         eval_strategy="steps",
         eval_steps=training_config["eval_steps"],
