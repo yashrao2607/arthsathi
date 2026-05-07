@@ -85,10 +85,24 @@ def train(model, tokenizer, train_dataset, val_dataset, config, compute_dtype):
         if "4bit" not in str(param.dtype).lower():
             param.data = param.data.to(torch.float16)
 
+    # Dataset formatting function (ChatML format for Qwen)
+    def formatting_prompts_func(example):
+        output_texts = []
+        for i in range(len(example['instruction'])):
+            system = example['system'][i] if 'system' in example else "You are ArthSathi, a financial advisor."
+            instruction = example['instruction'][i]
+            input_text = example['input'][i] if 'input' in example and example['input'][i] else ""
+            response = example['output'][i]
+            
+            text = f"<|im_start|>system\n{system}<|im_end|>\n"
+            text += f"<|im_start|>user\n{instruction} {input_text}<|im_end|>\n"
+            text += f"<|im_start|>assistant\n{response}<|im_end|>"
+            output_texts.append(text)
+        return output_texts
+
     sft_config = SFTConfig(
         output_dir=training_config["output_dir"],
         max_length=config["model"].get("max_seq_length", 2048),
-        dataset_text_field="text",
         packing=False,
         per_device_train_batch_size=training_config["per_device_train_batch_size"],
         gradient_accumulation_steps=training_config["gradient_accumulation_steps"],
@@ -109,6 +123,7 @@ def train(model, tokenizer, train_dataset, val_dataset, config, compute_dtype):
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         args=sft_config,
+        formatting_func=formatting_prompts_func,
         processing_class=tokenizer,
     )
     
