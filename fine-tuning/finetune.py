@@ -187,6 +187,7 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
         "quantization_config": bnb_config,
         "device_map": device_map,
         "trust_remote_code": model_config.get("trust_remote_code", True),
+        "torch_dtype": compute_dtype,
     }
 
     # Flash Attention 2 (requires Ampere+ GPU and flash-attn package)
