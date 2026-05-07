@@ -87,18 +87,15 @@ def train(model, tokenizer, train_dataset, val_dataset, config, compute_dtype):
 
     # Dataset formatting function (ChatML format for Qwen)
     def formatting_prompts_func(example):
-        output_texts = []
-        for i in range(len(example['instruction'])):
-            system = example['system'][i] if 'system' in example else "You are ArthSathi, a financial advisor."
-            instruction = example['instruction'][i]
-            input_text = example['input'][i] if 'input' in example and example['input'][i] else ""
-            response = example['output'][i]
-            
-            text = f"<|im_start|>system\n{system}<|im_end|>\n"
-            text += f"<|im_start|>user\n{instruction} {input_text}<|im_end|>\n"
-            text += f"<|im_start|>assistant\n{response}<|im_end|>"
-            output_texts.append(text)
-        return output_texts
+        system = example.get('system', "You are ArthSathi, a financial advisor.")
+        instruction = example.get('instruction', "")
+        input_text = example.get('input', "")
+        response = example.get('output', "")
+        
+        text = f"<|im_start|>system\n{system}<|im_end|>\n"
+        text += f"<|im_start|>user\n{instruction} {input_text}".strip() + "<|im_end|>\n"
+        text += f"<|im_start|>assistant\n{response}<|im_end|>"
+        return text
 
     sft_config = SFTConfig(
         output_dir=training_config["output_dir"],
