@@ -291,7 +291,8 @@ def train(
         config: Full configuration dictionary
     """
     import torch
-    from trl import SFTTrainer, SFTConfig
+    from transformers import TrainingArguments
+    from trl import SFTTrainer
 
     training_config = config["training"]
     model_config = config["model"]
@@ -312,8 +313,8 @@ def train(
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(checkpoint_dir, exist_ok=True)
 
-    # --- SFT Training Arguments ---
-    sft_args = SFTConfig(
+    # --- Training Arguments ---
+    training_args = TrainingArguments(
         # Output
         output_dir=checkpoint_dir,
         run_name="arthsathi-qlora",
@@ -378,7 +379,7 @@ def train(
     # --- Create Trainer ---
     trainer = SFTTrainer(
         model=model,
-        args=sft_args,
+        args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         processing_class=tokenizer,
@@ -388,11 +389,11 @@ def train(
 
     # --- Print training summary ---
     effective_batch_size = (
-        sft_args.per_device_train_batch_size
-        * sft_args.gradient_accumulation_steps
-        * torch.cuda.device_count() if torch.cuda.is_available() else 1
+        training_args.per_device_train_batch_size
+        * training_args.gradient_accumulation_steps
+        * (torch.cuda.device_count() if torch.cuda.is_available() else 1)
     )
-    total_steps = len(train_dataset) // effective_batch_size * sft_args.num_train_epochs
+    total_steps = len(train_dataset) // effective_batch_size * training_args.num_train_epochs
 
     logger.info("=" * 60)
     logger.info("TRAINING SUMMARY")
