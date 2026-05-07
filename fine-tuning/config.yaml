@@ -79,28 +79,93 @@ lora:
 # Quantization Configuration (4-bit QLoRA)
 # ---------------------------------------------------------------------------
 quantization:
+
+# ---------------------------------------------------------------------------
+# Dataset Configuration
+# ---------------------------------------------------------------------------
+dataset:
+  # Source datasets from HuggingFace
+  sources:
+    - name: "bharatgenai/FinanceParam"
+      split: "train"
+      format: "financeparam"            # Custom parser for this dataset format
+    - name: "gbharti/finance-alpaca"
+      split: "train"
+      format: "alpaca"                  # Standard Alpaca instruction format
+
+  # Output paths
+  output_dir: "./data"                  # Directory for processed JSONL files
+  train_file: "train.jsonl"
+  val_file: "val.jsonl"
+  test_file: "test.jsonl"
+
+  # Split ratios
+  train_ratio: 0.90
+  val_ratio: 0.05
+  test_ratio: 0.05
+
+  # Data quality filters
+  min_instruction_length: 10            # Minimum characters in instruction
+  min_output_length: 20                 # Minimum characters in output
+  max_instruction_length: 1024          # Maximum characters in instruction
+  max_output_length: 2048               # Maximum characters in output
+  deduplication_threshold: 0.85         # Jaccard similarity threshold for dedup
+
+  # System prompt appended to every sample
+  system_prompt: |
+    You are ArthSathi (अर्थसाथी), an expert Indian financial advisor AI. You provide accurate,
+    helpful, and regulation-compliant financial guidance for Indian users. You are knowledgeable
+    about Indian tax laws (old and new regimes), mutual funds (SIP, SWP, ELSS), insurance,
+    fixed deposits, PPF, NPS, RBI guidelines, and SEBI regulations. You respond clearly in
+    English or Hindi as appropriate. Always include relevant disclaimers that this is not
+    professional financial advice. Use Indian numbering conventions (lakhs, crores) and
+    INR currency. When discussing taxes, reference current assessment year and applicable
+    sections of the Income Tax Act.
+
+# ---------------------------------------------------------------------------
+# QLoRA / LoRA Configuration
+# ---------------------------------------------------------------------------
+lora:
+  rank: 64                              # LoRA rank (r)
+  alpha: 128                            # LoRA alpha (scaling factor)
+  dropout: 0.05                         # LoRA dropout probability
+  target_modules:                       # Modules to apply LoRA adapters
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"                          # Bias handling: none, all, or lora_only
+  task_type: "CAUSAL_LM"               # Task type for PEFT
+
+# ---------------------------------------------------------------------------
+# Quantization Configuration (4-bit QLoRA)
+# ---------------------------------------------------------------------------
+quantization:
   load_in_4bit: true                    # Enable 4-bit quantization
   bnb_4bit_quant_type: "nf4"           # Quantization type: nf4 or fp4
   bnb_4bit_compute_dtype: "float16"    # Compute dtype during quantization
   bnb_4bit_use_double_quant: true       # Double quantization for memory savings
 
 # ---------------------------------------------------------------------------
-# Training Arguments
 # ---------------------------------------------------------------------------
 training:
   output_dir: "./output"                # Directory for model output
   checkpoint_dir: "./checkpoints"       # Directory for checkpoint saves
 
   # Batch and gradient settings
-  per_device_train_batch_size: 4        # Training batch size per GPU
-  per_device_eval_batch_size: 4         # Evaluation batch size per GPU
-  gradient_accumulation_steps: 8        # Gradient accumulation for effective batch=32
+  per_device_train_batch_size: 2        # Reduced from 4 to 2 to prevent OOM
+  per_device_eval_batch_size: 2         # Reduced from 4 to 2
+  gradient_accumulation_steps: 16       # Increased from 8 to 16 to keep effective batch=64
 
   # Learning rate schedule
   learning_rate: 2.0e-4                 # Peak learning rate
   lr_scheduler_type: "cosine"           # Scheduler: cosine, linear, constant
   warmup_ratio: 0.1                     # Fraction of steps for warmup
   weight_decay: 0.01                    # Weight decay for regularization
+
 
   # Epochs and limits
   num_train_epochs: 3                   # Total training epochs
