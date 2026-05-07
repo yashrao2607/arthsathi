@@ -291,8 +291,7 @@ def train(
         config: Full configuration dictionary
     """
     import torch
-    from transformers import TrainingArguments
-    from trl import SFTTrainer
+    from trl import SFTTrainer, SFTConfig
 
     training_config = config["training"]
     model_config = config["model"]
@@ -313,8 +312,8 @@ def train(
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(checkpoint_dir, exist_ok=True)
 
-    # --- Training Arguments ---
-    training_args = TrainingArguments(
+    # --- SFT Training Config ---
+    sft_config = SFTConfig(
         # Output
         output_dir=checkpoint_dir,
         run_name="arthsathi-qlora",
@@ -368,6 +367,11 @@ def train(
         dataloader_num_workers=training_config.get("dataloader_num_workers", 4),
         dataloader_pin_memory=training_config.get("dataloader_pin_memory", True),
 
+        # SFT-specific (these belong in SFTConfig, not TrainingArguments)
+        max_length=model_config.get("max_seq_length", 2048),
+        dataset_text_field="text",
+        packing=False,
+
         # Misc
         remove_unused_columns=training_config.get("remove_unused_columns", False),
     )
@@ -375,22 +379,19 @@ def train(
     # --- Create Trainer ---
     trainer = SFTTrainer(
         model=model,
-        args=training_args,
+        args=sft_config,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         processing_class=tokenizer,
-        max_seq_length=model_config.get("max_seq_length", 2048),
-        dataset_text_field="text",
-        packing=False,
     )
 
     # --- Print training summary ---
     effective_batch_size = (
-        training_args.per_device_train_batch_size
-        * training_args.gradient_accumulation_steps
+        sft_config.per_device_train_batch_size
+        * sft_config.gradient_accumulation_steps
         * (torch.cuda.device_count() if torch.cuda.is_available() else 1)
     )
-    total_steps = len(train_dataset) // effective_batch_size * training_args.num_train_epochs
+    total_steps = len(train_dataset) // effective_batch_size * sft_config.num_train_epochs
 
     logger.info("=" * 60)
     logger.info("TRAINING SUMMARY")
