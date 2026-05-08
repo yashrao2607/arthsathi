@@ -473,22 +473,20 @@ function ChatMessage({
     >
       {/* Avatar */}
       <div
-        className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-          isUser
+        className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${isUser
             ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
             : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
-        }`}
+          }`}
       >
         {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
       </div>
 
       {/* Message bubble */}
       <div
-        className={`group max-w-[80%] rounded-2xl px-4 py-3 transition-shadow duration-200 relative ${
-          isUser
+        className={`group max-w-[80%] rounded-2xl px-4 py-3 transition-shadow duration-200 relative ${isUser
             ? "bg-gradient-to-r from-emerald-500 to-emerald-700 text-white rounded-br-md hover:shadow-md user-msg-pattern"
             : "assistant-bubble bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-bl-md border-l-[3px] border-l-emerald-400 dark:border-l-emerald-600 hover:shadow-md"
-        }`}
+          }`}
       >
         {/* AI Watermark for assistant messages */}
         {!isUser && <span className="ai-watermark">AI</span>}
@@ -698,11 +696,10 @@ function TypingIndicator({ language = "hi" }: { language?: string }) {
           {stages.map((_, i) => (
             <div
               key={i}
-              className={`h-1 rounded-full transition-all duration-500 ${
-                i <= stageIndex
+              className={`h-1 rounded-full transition-all duration-500 ${i <= stageIndex
                   ? "bg-emerald-500 dark:bg-emerald-400"
                   : "bg-slate-200 dark:bg-slate-700"
-              }`}
+                }`}
               style={{ flex: i <= stageIndex ? 2 : 1 }}
             />
           ))}
@@ -979,9 +976,8 @@ function WelcomeScreen({ onQueryClick }: { onQueryClick: (q: string) => void }) 
                 </div>
                 <Badge
                   variant="secondary"
-                  className={`text-[8px] px-1 py-0 h-4 flex-shrink-0 hidden sm:flex ${
-                    CATEGORY_COLORS[q.category] || "bg-slate-100 text-slate-600"
-                  }`}
+                  className={`text-[8px] px-1 py-0 h-4 flex-shrink-0 hidden sm:flex ${CATEGORY_COLORS[q.category] || "bg-slate-100 text-slate-600"
+                    }`}
                 >
                   {q.category}
                 </Badge>
@@ -1048,9 +1044,8 @@ function SampleQueriesPanel({ onQueryClick }: { onQueryClick: (q: string) => voi
             </div>
             <Badge
               variant="secondary"
-              className={`text-[9px] px-1.5 py-0 h-5 flex-shrink-0 ${
-                CATEGORY_COLORS[q.category] || "bg-slate-100 text-slate-600"
-              }`}
+              className={`text-[9px] px-1.5 py-0 h-5 flex-shrink-0 ${CATEGORY_COLORS[q.category] || "bg-slate-100 text-slate-600"
+                }`}
             >
               {q.category}
             </Badge>
@@ -1300,11 +1295,10 @@ function TaxSlabsPanel() {
             {slab.range}
           </span>
           <span
-            className={`text-sm font-semibold ${
-              slab.rate === "Nil"
+            className={`text-sm font-semibold ${slab.rate === "Nil"
                 ? "text-emerald-600 dark:text-emerald-400"
                 : "text-slate-900 dark:text-slate-100"
-            }`}
+              }`}
           >
             {slab.rate}
           </span>
@@ -1427,11 +1421,10 @@ function EmiCalculator({
             <button
               key={lt.value}
               onClick={() => handleLoanTypeChange(lt.value)}
-              className={`flex items-center gap-2 p-2.5 rounded-lg border text-sm transition-all ${
-                loanType === lt.value
+              className={`flex items-center gap-2 p-2.5 rounded-lg border text-sm transition-all ${loanType === lt.value
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-              }`}
+                }`}
             >
               <lt.icon className="w-4 h-4" />
               {lt.label}
@@ -1472,11 +1465,10 @@ function EmiCalculator({
             <button
               key={r}
               onClick={() => { setRate(r); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                rate === r
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${rate === r
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {r}%
             </button>
@@ -1502,11 +1494,10 @@ function EmiCalculator({
             <button
               key={t}
               onClick={() => { setTenure(t); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                tenure === t
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${tenure === t
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {t}yr
             </button>
@@ -1533,85 +1524,85 @@ function EmiCalculator({
         const principalPct = Math.round((result.principal / result.totalPayment) * 100);
         const interestPct = 100 - principalPct;
         return (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-3"
-        >
-          <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800 result-card-glow stagger-1">
-            <p className="text-xs text-emerald-600 dark:text-emerald-500 mb-1">Monthly EMI</p>
-            <p className="text-4xl font-bold text-emerald-700 dark:text-emerald-300">₹{inr.format(Math.round(result.emi))}<span className="unit-suffix">/mo</span></p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-3"
+          >
+            <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800 result-card-glow stagger-1">
+              <p className="text-xs text-emerald-600 dark:text-emerald-500 mb-1">Monthly EMI</p>
+              <p className="text-4xl font-bold text-emerald-700 dark:text-emerald-300">₹{inr.format(Math.round(result.emi))}<span className="unit-suffix">/mo</span></p>
+            </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 result-card-glow stagger-2">
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">Total Interest</p>
-              <p className="text-lg font-semibold text-rose-600 dark:text-rose-400">₹{inr.format(Math.round(result.totalInterest))}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 result-card-glow stagger-3">
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">Total Payment</p>
-              <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">₹{inr.format(Math.round(result.totalPayment))}</p>
-            </div>
-          </div>
-
-          {/* Visual breakdown bar */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span>Principal ({principalPct}%)</span>
-              <span>Interest ({interestPct}%)</span>
-            </div>
-            <div className="h-3 w-full rounded-full overflow-hidden bg-slate-200 dark:bg-slate-700">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500"
-                style={{ width: `${principalPct}%` }}
-              />
-            </div>
-            <div className="flex items-center gap-3 text-[10px]">
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                Principal
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600" />
-                Interest
-              </span>
-            </div>
-          </div>
-
-          {/* Year-wise breakdown */}
-          <Collapsible open={breakdownOpen} onOpenChange={setBreakdownOpen}>
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="w-full text-xs text-slate-500 dark:text-slate-400">
-                <ChevronDown className={`w-3 h-3 mr-1 transition-transform ${breakdownOpen ? "rotate-180" : ""}`} />
-                Year-wise Breakdown
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="max-h-48 overflow-y-auto rounded-lg border border-slate-200 dark:border-slate-700 mt-1">
-                <table className="w-full text-[11px]">
-                  <thead className="bg-slate-50 dark:bg-slate-800/50 sticky top-0">
-                    <tr>
-                      <th className="p-2 text-left text-slate-600 dark:text-slate-400">Year</th>
-                      <th className="p-2 text-right text-slate-600 dark:text-slate-400">Principal</th>
-                      <th className="p-2 text-right text-slate-600 dark:text-slate-400">Interest</th>
-                      <th className="p-2 text-right text-slate-600 dark:text-slate-400">Balance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.schedule.map((yr) => (
-                      <tr key={yr.year} className="border-t border-slate-100 dark:border-slate-800">
-                        <td className="p-2 text-slate-700 dark:text-slate-300">{yr.year}</td>
-                        <td className="p-2 text-right text-emerald-600 dark:text-emerald-400">{fmtINR(Math.round(yr.principalPaid))}</td>
-                        <td className="p-2 text-right text-rose-600 dark:text-rose-400">{fmtINR(Math.round(yr.interestPaid))}</td>
-                        <td className="p-2 text-right text-slate-700 dark:text-slate-300">{fmtINR(Math.round(yr.closingBalance))}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 result-card-glow stagger-2">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">Total Interest</p>
+                <p className="text-lg font-semibold text-rose-600 dark:text-rose-400">₹{inr.format(Math.round(result.totalInterest))}</p>
               </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </motion.div>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 result-card-glow stagger-3">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">Total Payment</p>
+                <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">₹{inr.format(Math.round(result.totalPayment))}</p>
+              </div>
+            </div>
+
+            {/* Visual breakdown bar */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                <span>Principal ({principalPct}%)</span>
+                <span>Interest ({interestPct}%)</span>
+              </div>
+              <div className="h-3 w-full rounded-full overflow-hidden bg-slate-200 dark:bg-slate-700">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500"
+                  style={{ width: `${principalPct}%` }}
+                />
+              </div>
+              <div className="flex items-center gap-3 text-[10px]">
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  Principal
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600" />
+                  Interest
+                </span>
+              </div>
+            </div>
+
+            {/* Year-wise breakdown */}
+            <Collapsible open={breakdownOpen} onOpenChange={setBreakdownOpen}>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="w-full text-xs text-slate-500 dark:text-slate-400">
+                  <ChevronDown className={`w-3 h-3 mr-1 transition-transform ${breakdownOpen ? "rotate-180" : ""}`} />
+                  Year-wise Breakdown
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="max-h-48 overflow-y-auto rounded-lg border border-slate-200 dark:border-slate-700 mt-1">
+                  <table className="w-full text-[11px]">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 sticky top-0">
+                      <tr>
+                        <th className="p-2 text-left text-slate-600 dark:text-slate-400">Year</th>
+                        <th className="p-2 text-right text-slate-600 dark:text-slate-400">Principal</th>
+                        <th className="p-2 text-right text-slate-600 dark:text-slate-400">Interest</th>
+                        <th className="p-2 text-right text-slate-600 dark:text-slate-400">Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.schedule.map((yr) => (
+                        <tr key={yr.year} className="border-t border-slate-100 dark:border-slate-800">
+                          <td className="p-2 text-slate-700 dark:text-slate-300">{yr.year}</td>
+                          <td className="p-2 text-right text-emerald-600 dark:text-emerald-400">{fmtINR(Math.round(yr.principalPaid))}</td>
+                          <td className="p-2 text-right text-rose-600 dark:text-rose-400">{fmtINR(Math.round(yr.interestPaid))}</td>
+                          <td className="p-2 text-right text-slate-700 dark:text-slate-300">{fmtINR(Math.round(yr.closingBalance))}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </motion.div>
         );
       })()}
     </div>
@@ -1622,13 +1613,13 @@ function EmiCalculator({
     <>
       <Dialog open={open && isDesktop} onOpenChange={(v) => { if (isDesktop) onOpenChange(v); }}>
         <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto dialog-animate">
-        <DialogHeader className="dialog-gradient-header">
-          <DialogTitle className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <Calculator className="w-4 h-4 text-white" />
-            </div>
-            EMI Calculator
-            <span className="text-emerald-600 dark:text-emerald-400 text-lg">₹</span>
+          <DialogHeader className="dialog-gradient-header">
+            <DialogTitle className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                <Calculator className="w-4 h-4 text-white" />
+              </div>
+              EMI Calculator
+              <span className="text-emerald-600 dark:text-emerald-400 text-lg">₹</span>
             </DialogTitle>
             <DialogDescription>
               Calculate your Equated Monthly Installment
@@ -1753,11 +1744,10 @@ function TaxCalculator({
             <button
               key={r}
               onClick={() => { setRegime(r); setResult(null); }}
-              className={`p-2.5 rounded-lg border text-xs font-medium transition-all capitalize ${
-                regime === r
+              className={`p-2.5 rounded-lg border text-xs font-medium transition-all capitalize ${regime === r
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-              }`}
+                }`}
             >
               {r === "both" ? "Compare Both" : `${r} Regime`}
             </button>
@@ -1831,11 +1821,10 @@ function TaxCalculator({
             <div className="space-y-3">
               {/* Recommendation badge */}
               {result.comparison && (
-                <div className={`p-3 rounded-xl border ${
-                  result.comparison.recommendation === "new"
+                <div className={`p-3 rounded-xl border ${result.comparison.recommendation === "new"
                     ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800"
                     : "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
-                }`}>
+                  }`}>
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
@@ -1903,7 +1892,7 @@ function TaxCalculator({
     <>
       <Dialog open={open && isDesktop} onOpenChange={(v) => { if (isDesktop) onOpenChange(v); }}>
         <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto dialog-animate">
-        <DialogHeader className="dialog-gradient-header">
+          <DialogHeader className="dialog-gradient-header">
             <DialogTitle className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center">
                 <Scale className="w-4 h-4 text-white" />
@@ -2006,11 +1995,10 @@ function SipCalculator({
             <button
               key={a}
               onClick={() => { setMonthlyAmount(a); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                monthlyAmount === a
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${monthlyAmount === a
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               ₹{inr.format(a)}
             </button>
@@ -2035,11 +2023,10 @@ function SipCalculator({
             <button
               key={r}
               onClick={() => { setExpectedRate(r); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                expectedRate === r
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${expectedRate === r
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {r}%
             </button>
@@ -2065,11 +2052,10 @@ function SipCalculator({
             <button
               key={t}
               onClick={() => { setTenure(t); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                tenure === t
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${tenure === t
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {t}yr
             </button>
@@ -2098,11 +2084,10 @@ function SipCalculator({
             <button
               key={s}
               onClick={() => { setStepUp(s); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                stepUp === s
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${stepUp === s
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {s}%
             </button>
@@ -2262,7 +2247,7 @@ function SipCalculator({
     <>
       <Dialog open={open && isDesktop} onOpenChange={(v) => { if (isDesktop) onOpenChange(v); }}>
         <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto dialog-animate">
-        <DialogHeader className="dialog-gradient-header">
+          <DialogHeader className="dialog-gradient-header">
             <DialogTitle className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 text-white" />
@@ -2369,11 +2354,10 @@ function CompoundInterestCalculator({
             <button
               key={p}
               onClick={() => { setPrincipal(p); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                principal === p
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${principal === p
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {p >= 100000 ? `₹${p / 100000}L` : p >= 1000 ? `₹${p / 1000}K` : `₹${p}`}
             </button>
@@ -2398,11 +2382,10 @@ function CompoundInterestCalculator({
             <button
               key={r}
               onClick={() => { setRate(r); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                rate === r
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${rate === r
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {r}%
             </button>
@@ -2428,11 +2411,10 @@ function CompoundInterestCalculator({
             <button
               key={t}
               onClick={() => { setTenure(t); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                tenure === t
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${tenure === t
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {t}yr
             </button>
@@ -2453,11 +2435,10 @@ function CompoundInterestCalculator({
             <button
               key={freq.value}
               onClick={() => { setCompoundingFrequency(freq.value); setResult(null); }}
-              className={`p-2 rounded-lg border text-xs font-medium transition-all ${
-                compoundingFrequency === freq.value
+              className={`p-2 rounded-lg border text-xs font-medium transition-all ${compoundingFrequency === freq.value
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-              }`}
+                }`}
             >
               {freq.label}
             </button>
@@ -2485,11 +2466,10 @@ function CompoundInterestCalculator({
             <button
               key={c}
               onClick={() => { setMonthlyContribution(c); setResult(null); }}
-              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
-                monthlyContribution === c
+              className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${monthlyContribution === c
                   ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                   : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300"
-              }`}
+                }`}
             >
               {c === 0 ? "₹0" : c >= 1000 ? `₹${c / 1000}K` : `₹${c}`}
             </button>
@@ -2812,11 +2792,10 @@ function RetirementCalculator({
           </div>
 
           {/* Shortfall / Surplus */}
-          <div className={`p-4 rounded-xl border result-card-glow ${
-            result.shortfall > 0
+          <div className={`p-4 rounded-xl border result-card-glow ${result.shortfall > 0
               ? "bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800"
               : "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800"
-          }`}>
+            }`}>
             <p className={`text-sm font-semibold ${result.shortfall > 0 ? "text-rose-700 dark:text-rose-300" : "text-emerald-700 dark:text-emerald-300"}`}>
               {result.shortfall > 0 ? `Shortfall: ₹${inr.format(Math.round(result.shortfall))}` : `Surplus: ₹${inr.format(Math.round(Math.abs(result.shortfall)))}`}
             </p>
@@ -3247,11 +3226,10 @@ function HealthScoreDialog({
                   <button
                     key={opt}
                     onClick={() => handleAnswer(q.id, opt)}
-                    className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-                      answers[q.id] === opt
+                    className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${answers[q.id] === opt
                         ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                         : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                    }`}
+                      }`}
                   >
                     {opt}
                   </button>
@@ -3318,7 +3296,7 @@ function HealthScoreDialog({
 
   return (
     <>
-      <Dialog open={open && isDesktop} onOpenChange={(v) => { if (isDesktop) { onOpenChange(v); if (!v) { setAnswers({}); setShowResult(false); } }}}>
+      <Dialog open={open && isDesktop} onOpenChange={(v) => { if (isDesktop) { onOpenChange(v); if (!v) { setAnswers({}); setShowResult(false); } } }}>
         <DialogContent className="sm:max-w-md backdrop-blur-xl bg-white/90 dark:bg-slate-900/90 border-emerald-200/30 dark:border-emerald-800/30 shadow-[0_0_30px_rgba(16,185,129,0.08)] dialog-animate">
           <DialogHeader className="dialog-gradient-header">
             <DialogTitle className="flex items-center gap-2">
@@ -3332,7 +3310,7 @@ function HealthScoreDialog({
           {content}
         </DialogContent>
       </Dialog>
-      <Sheet open={open && !isDesktop} onOpenChange={(v) => { if (!isDesktop) { onOpenChange(v); if (!v) { setAnswers({}); setShowResult(false); } }}}>
+      <Sheet open={open && !isDesktop} onOpenChange={(v) => { if (!isDesktop) { onOpenChange(v); if (!v) { setAnswers({}); setShowResult(false); } } }}>
         <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-2xl backdrop-blur-xl bg-white/90 dark:bg-slate-900/90">
           <SheetHeader className="dialog-gradient-header">
             <SheetTitle className="flex items-center gap-2">
@@ -3416,7 +3394,7 @@ function ModelInfoDialog({
       fetch("/api/model-info")
         .then((r) => r.json())
         .then((d) => setData(d))
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [open]);
 
@@ -3653,7 +3631,7 @@ function BenchmarkDialog({
       fetch("/api/benchmark")
         .then((r) => r.json())
         .then((d) => setData(d))
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [open]);
 
@@ -3690,11 +3668,10 @@ function BenchmarkDialog({
               <button
                 key={tab.key}
                 onClick={() => setActiveChart(tab.key)}
-                className={`flex-1 px-2 py-1.5 rounded-md text-[10px] font-medium transition-all ${
-                  activeChart === tab.key
+                className={`flex-1 px-2 py-1.5 rounded-md text-[10px] font-medium transition-all ${activeChart === tab.key
                     ? "bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm"
                     : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -4189,8 +4166,8 @@ function FinanceQuizDialog({ open, onOpenChange }: { open: boolean; onOpenChange
             {score >= 8
               ? (isHindi ? "शानदार! आप वित्तीय विशेषज्ञ हैं!" : "Excellent! You're a finance expert!")
               : score >= 5
-              ? (isHindi ? "अच्छा प्रयास! और सीखते रहें!" : "Good try! Keep learning!")
-              : (isHindi ? "और अभ्यास करें, ArthSathi से सीखें!" : "More practice needed — learn with ArthSathi!")}
+                ? (isHindi ? "अच्छा प्रयास! और सीखते रहें!" : "Good try! Keep learning!")
+                : (isHindi ? "और अभ्यास करें, ArthSathi से सीखें!" : "More practice needed — learn with ArthSathi!")}
           </p>
           <Button onClick={startQuiz} className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white">
             {isHindi ? "फिर से खेलें" : "Play Again"}
@@ -5173,11 +5150,10 @@ export default function Home() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className={`h-8 w-8 hidden md:flex ${
-                      isSidebarOpen
+                    className={`h-8 w-8 hidden md:flex ${isSidebarOpen
                         ? "text-emerald-600 dark:text-emerald-400"
                         : "text-slate-400"
-                    }`}
+                      }`}
                     onClick={toggleSidebar}
                     aria-label="Toggle panel"
                   >
@@ -5258,11 +5234,10 @@ export default function Home() {
                         <div className="flex items-center justify-center gap-2 mt-1">
                           <button
                             onClick={() => setShowBookmarkedOnly(!showBookmarkedOnly)}
-                            className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
-                              showBookmarkedOnly
+                            className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border transition-colors ${showBookmarkedOnly
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800"
                                 : "text-slate-400 border-slate-200 dark:border-slate-700 hover:text-emerald-600 dark:hover:text-emerald-400"
-                            }`}
+                              }`}
                           >
                             <Bookmark className={`w-3 h-3 ${showBookmarkedOnly ? "fill-current" : ""}`} />
                             {showBookmarkedOnly ? "Showing bookmarked only" : "Show bookmarked only"}
@@ -5317,17 +5292,17 @@ export default function Home() {
                     .filter((msg) => !searchQuery || msg.content.toLowerCase().includes(searchQuery.toLowerCase()))
                     .filter((msg) => !showBookmarkedOnly || msg.bookmarked)
                     .map((msg) => (
-                    <ChatMessage
-                      key={msg.id}
-                      message={msg}
-                      language={language}
-                      reaction={msg.reaction}
-                      onReaction={setReaction}
-                      searchQuery={searchQuery}
-                      bookmarked={msg.bookmarked}
-                      onToggleBookmark={toggleBookmark}
-                    />
-                  ))}
+                      <ChatMessage
+                        key={msg.id}
+                        message={msg}
+                        language={language}
+                        reaction={msg.reaction}
+                        onReaction={setReaction}
+                        searchQuery={searchQuery}
+                        bookmarked={msg.bookmarked}
+                        onToggleBookmark={toggleBookmark}
+                      />
+                    ))}
                   {isLoading && <TypingIndicator language={language} />}
                   <div ref={messagesEndRef} />
                 </div>
@@ -5391,11 +5366,10 @@ export default function Home() {
                         onClick={isRecording ? stopRecording : startRecording}
                         variant="ghost"
                         size="icon"
-                        className={`h-11 w-11 rounded-xl flex-shrink-0 transition-all ${
-                          isRecording
+                        className={`h-11 w-11 rounded-xl flex-shrink-0 transition-all ${isRecording
                             ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 animate-pulse"
                             : "text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400"
-                        }`}
+                          }`}
                         disabled={isLoading || isTranscribing}
                       >
                         {isTranscribing ? (
@@ -5415,9 +5389,8 @@ export default function Home() {
                     onClick={handleSend}
                     disabled={!input.trim() || isLoading}
                     size="icon"
-                    className={`h-11 w-11 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-200 dark:shadow-emerald-900/30 disabled:opacity-40 disabled:shadow-none flex-shrink-0 transition-all ${
-                      input.trim() && !isLoading ? "animate-send-pulse" : ""
-                    }`}
+                    className={`h-11 w-11 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-200 dark:shadow-emerald-900/30 disabled:opacity-40 disabled:shadow-none flex-shrink-0 transition-all ${input.trim() && !isLoading ? "animate-send-pulse" : ""
+                      }`}
                   >
                     {isLoading ? (
                       <RefreshCw className="w-4 h-4 animate-spin" />
