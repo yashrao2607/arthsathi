@@ -212,6 +212,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Phase 3.2: Boundary validation for extreme inputs
+    if (rate > 50) {
+      return NextResponse.json(
+        {
+          error: "Interest rate exceeds 50%. This appears unusually high — please verify the rate. If this is a non-institutional lender, exercise caution.",
+          suggestion: "Standard Indian bank rates: Home 8.5-9.5%, Personal 10.5-16%, Car 8.5-11.5%, Education 8-12%."
+        },
+        { status: 400 }
+      );
+    }
+
+    if (tenure > 600) {
+      return NextResponse.json(
+        {
+          error: "Tenure exceeds 50 years (600 months), which is not a standard loan product in India.",
+          suggestion: "Most Indian home loans cap at 30 years (360 months). Consider a shorter tenure for lower total interest."
+        },
+        { status: 400 }
+      );
+    }
+
     // Calculate EMI
     const emi = calculateEMI(principal, rate, tenure);
     const totalPayment = Math.round(emi * tenure * 100) / 100;
@@ -220,6 +241,11 @@ export async function POST(request: NextRequest) {
     // Generate breakdown and yearly schedule
     const { breakdown, truncated } = generateBreakdown(principal, rate, tenure, emi);
     const schedule = generateYearlySchedule(principal, rate, tenure, emi);
+
+    // Smart suggestion: warn if total interest exceeds principal (high debt burden)
+    const debtWarning = totalInterest > principal
+      ? `⚠️ Advisory: Total interest (₹${totalInterest.toLocaleString("en-IN")}) exceeds the principal amount. Consider a shorter tenure or prepayment strategy to reduce interest burden.`
+      : null;
 
     const response: EMIResponse = {
       emi,
@@ -230,7 +256,8 @@ export async function POST(request: NextRequest) {
       truncated,
       schedule,
       benchmarks: BENCHMARKS,
-    };
+      ...(debtWarning ? { advisory: debtWarning } : {}),
+    } as EMIResponse;
 
     return NextResponse.json(response);
   } catch (error) {

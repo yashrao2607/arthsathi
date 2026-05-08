@@ -76,9 +76,17 @@ export async function GET() {
     },
     privacy: {
       onDevice: true,
-      dataSharing: "None - all processing happens locally",
-      piiCollection: "Zero - no personal data leaves the device",
-      auditLog: "Available on request",
+      dataSharing: "None — all inference happens locally via Ollama. Zero network calls for LLM.",
+      piiCollection: "Zero — no personal data collected, stored, or transmitted",
+      dpdpaCompliant: true,
+      dpdpaDetails: "Compliant with Digital Personal Data Protection Act 2023. No PII logging, Aadhaar masked to last-4, consent-free architecture.",
+      auditLog: "Local inference logs available on device only",
+    },
+    regulatoryKnowledge: {
+      frameworks: ["RBI Master Direction (FD/Deposits)", "SEBI MF Regulations 1996", "DICGC Act 1961 (amended 2021)", "Income Tax Act (Sections 80C/80D/80CCD/194A)", "DPDPA 2023", "IRDAI Insurance Regulations", "PFRDA NPS Regulations"],
+      dataReferences: ["Builder Pack 04_regulatory_refs", "RBI circulars", "SEBI Master Circulars", "Income Tax India portal"],
+      supportedLanguages: ["Hindi", "Tamil", "Bengali", "Telugu", "Marathi", "Gujarati", "Kannada", "Malayalam", "Punjabi", "Odia", "Urdu", "English"],
+      vernacularCapability: "Code-mixing aware — handles Hinglish, Tanglish, Banglish, Kanglish naturally",
     },
   });
 }

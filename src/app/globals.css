@@ -112,6 +112,58 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ─── Mandala Watermark ─── */
+@keyframes mandala-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.mandala-watermark {
+  position: fixed;
+  bottom: -120px;
+  right: -120px;
+  width: 400px;
+  height: 400px;
+  opacity: 0.018;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='none' stroke='%2310b981' stroke-width='0.5'/%3E%3Ccircle cx='100' cy='100' r='70' fill='none' stroke='%2310b981' stroke-width='0.5'/%3E%3Ccircle cx='100' cy='100' r='50' fill='none' stroke='%2310b981' stroke-width='0.5'/%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%2310b981' stroke-width='0.5'/%3E%3Cpath d='M100 10 L100 190 M10 100 L190 100 M29 29 L171 171 M171 29 L29 171' stroke='%2310b981' stroke-width='0.3'/%3E%3C/svg%3E");
+  background-size: contain;
+  animation: mandala-rotate 120s linear infinite;
+}
+
+.dark .mandala-watermark {
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='none' stroke='%2334d399' stroke-width='0.5'/%3E%3Ccircle cx='100' cy='100' r='70' fill='none' stroke='%2334d399' stroke-width='0.5'/%3E%3Ccircle cx='100' cy='100' r='50' fill='none' stroke='%2334d399' stroke-width='0.5'/%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%2334d399' stroke-width='0.5'/%3E%3Cpath d='M100 10 L100 190 M10 100 L190 100 M29 29 L171 171 M171 29 L29 171' stroke='%2334d399' stroke-width='0.3'/%3E%3C/svg%3E");
+}
+
+/* ─── Custom Scrollbar (utility) ─── */
+.custom-scrollbar::-webkit-scrollbar { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: oklch(0.82 0 0);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: oklch(0.7 0 0); }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: oklch(0.3 0 0); }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: oklch(0.45 0 0); }
+
+/* ─── Typing stage shimmer text ─── */
+@keyframes typing-stage {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+.typing-stage-text {
+  animation: typing-stage 1.5s ease-in-out infinite;
+}
+
+/* ─── Haptic-like button press ─── */
+.haptic-press:active {
+  transform: scale(0.96);
+  transition: transform 0.08s ease;
+}
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

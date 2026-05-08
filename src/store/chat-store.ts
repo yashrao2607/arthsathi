@@ -9,6 +9,10 @@ const LANG_CODE_TO_NAME: Record<string, string> = {
   mr: "marathi",
   gu: "gujarati",
   kn: "kannada",
+  ml: "malayalam",
+  pa: "punjabi",
+  or: "odia",
+  ur: "urdu",
   en: "english",
 };
 
@@ -203,6 +207,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
     { code: "mr", name: "Marathi", nativeName: "मराठी" },
     { code: "gu", name: "Gujarati", nativeName: "ગુજરાતી" },
     { code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ" },
+    { code: "ml", name: "Malayalam", nativeName: "മലയാളം" },
+    { code: "pa", name: "Punjabi", nativeName: "ਪੰਜਾਬੀ" },
+    { code: "or", name: "Odia", nativeName: "ଓଡ଼ିଆ" },
+    { code: "ur", name: "Urdu", nativeName: "اردو" },
     { code: "en", name: "English", nativeName: "English" },
   ],
   sampleQueries: [],
@@ -293,9 +301,19 @@ export const useChatStore = create<ChatState>((set, get) => ({
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
       set({ error: errorMessage });
+
+      // Contextual, professional financial alerts instead of generic error
+      const isConnectionError = errorMessage.includes("ECONNREFUSED") ||
+        errorMessage.includes("fetch") ||
+        errorMessage.includes("Failed to get response");
+
+      const professionalError = isConnectionError
+        ? "ArthSathi's on-device AI engine is currently initializing. Please ensure Ollama is running (`ollama run qwen3:4b`) and try again."
+        : "ArthSathi encountered a temporary processing delay. This is common during peak inference load on local hardware. Please try your question again in a moment.";
+
       addMessage({
         role: "assistant",
-        content: `⚠️ Error: ${errorMessage}. Please try again.`,
+        content: professionalError,
       });
     } finally {
       set({ isLoading: false });

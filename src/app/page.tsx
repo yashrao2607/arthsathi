@@ -520,7 +520,13 @@ function ChatMessage({
             {message.processingTime && (
               <span className="flex items-center gap-1 text-[10px] text-slate-400 border-r border-slate-200/60 dark:border-slate-700/60 pr-1.5">
                 <Clock className="w-3 h-3" />
-                {message.processingTime}ms
+                {(message.processingTime / 1000).toFixed(1)}s
+              </span>
+            )}
+            {message.model && (
+              <span className="flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 border-r border-slate-200/60 dark:border-slate-700/60 pr-1.5 font-medium">
+                <Cpu className="w-3 h-3" />
+                {message.model}
               </span>
             )}
             {message.language && (
@@ -529,10 +535,21 @@ function ChatMessage({
                 {message.language}
               </span>
             )}
-            <span className="flex items-center gap-1 text-[10px] text-slate-400 pr-1.5">
+            <span className="flex items-center gap-1 text-[10px] text-slate-400 border-r border-slate-200/60 dark:border-slate-700/60 pr-1.5">
               <Lock className="w-3 h-3" />
               On-device
             </span>
+            {message.processingTime && (
+              <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full ${
+                message.processingTime < 1500
+                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                  : message.processingTime < 5000
+                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                    : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
+              }`}>
+                {message.processingTime < 1500 ? "⚡ Fast" : message.processingTime < 5000 ? "✓ Good" : "⏳ Processing"}
+              </span>
+            )}
             <span className="ml-auto flex items-center gap-0.5">
               {/* Bookmark */}
               <Tooltip>
@@ -638,14 +655,18 @@ const THINKING_TEXT: Record<string, string> = {
 };
 
 const LOADING_STAGES: Record<string, string[]> = {
-  hi: ["वित्तीय डेटा का विश्लेषण कर रहा है...", "हिंदी में उत्तर तैयार कर रहा है...", "लगभग हो गया..."],
-  ta: ["நிதி தரவை பகுப்பாய்வு செய்கிறது...", "பதில் தயாராகிறது...", "ஏற்கனவே முடிந்தது..."],
-  bn: ["আর্থিক ডেটা বিশ্লেষণ করছে...", "উত্তর প্রস্তুত করছে...", "প্রায় শেষ..."],
-  te: ["ఆర్థిక డేటాను విశ్లేషిస్తోంది...", "సమాధానం సిద్ధమవుతోంది...", "దాదాపు అయిపోయింది..."],
-  mr: ["आर्थिक डेटा विश्लेषण करत आहे...", "उत्तर तयार करत आहे...", "जवळपास झाले..."],
-  gu: ["નાણાકીય ડેટાનું વિશ્લેષણ કરે છે...", "જવાબ તૈયાર કરે છે...", "લગભગ થઈ ગયું..."],
-  kn: ["ಹಣಕಾಸು ಡೇಟಾವನ್ನು ವಿಶ್ಲೇಷಿಸುತ್ತಿದೆ...", "ಉತ್ತರ ಸಿದ್ಧವಾಗುತ್ತಿದೆ...", "ಸುಮಾರು ಮುಗಿಯಿತು..."],
-  en: ["Analyzing financial data...", "Preparing response...", "Almost done..."],
+  hi: ["नीति और नियम जाँच रहा है...", "वित्तीय गणना कर रहा है...", "हिंदी में उत्तर तैयार कर रहा है..."],
+  ta: ["கொள்கை மற்றும் விதிமுறைகளை சரிபார்க்கிறது...", "நிதிக் கணக்கீடுகள் செய்கிறது...", "தமிழில் பதில் வடிவமைக்கிறது..."],
+  bn: ["নীতি ও বিধি যাচাই করছে...", "আর্থিক গণনা করছে...", "বাংলায় উত্তর প্রস্তুত করছে..."],
+  te: ["విధానం & నిబంధనలను తనిఖీ చేస్తోంది...", "ఆర్థిక లెక్కలు చేస్తోంది...", "తెలుగులో సమాధానం ఫార్మాట్ చేస్తోంది..."],
+  mr: ["धोरण व नियम तपासत आहे...", "आर्थिक गणना करत आहे...", "मराठीत उत्तर तयार करत आहे..."],
+  gu: ["નીતિ અને નિયમો તપાસી રહ્યું છે...", "નાણાકીય ગણતરી કરે છે...", "ગુજરાતીમાં જવાબ તૈયાર કરે છે..."],
+  kn: ["ನೀತಿ ಮತ್ತು ನಿಯಮಗಳನ್ನು ಪರಿಶೀಲಿಸುತ್ತಿದೆ...", "ಹಣಕಾಸು ಲೆಕ್ಕಾಚಾರ ಮಾಡುತ್ತಿದೆ...", "ಕನ್ನಡದಲ್ಲಿ ಉತ್ತರ ಸಿದ್ಧಪಡಿಸುತ್ತಿದೆ..."],
+  ml: ["നയവും നിയമങ്ങളും പരിശോധിക്കുന്നു...", "സാമ്പത്തിക കണക്കുകൂട്ടൽ...", "മലയാളത്തിൽ ഉത്തരം തയ്യാറാക്കുന്നു..."],
+  pa: ["ਨੀਤੀ ਅਤੇ ਨਿਯਮ ਜਾਂਚ ਰਿਹਾ ਹੈ...", "ਵਿੱਤੀ ਗਣਨਾ ਕਰ ਰਿਹਾ ਹੈ...", "ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਤਿਆਰ ਕਰ ਰਿਹਾ ਹੈ..."],
+  or: ["ନୀତି ଓ ନିୟମ ଯାଞ୍ଚ କରୁଛି...", "ଆର୍ଥିକ ଗଣନା କରୁଛି...", "ଓଡ଼ିଆରେ ଉତ୍ତର ପ୍ରସ୍ତୁତ କରୁଛି..."],
+  ur: ["پالیسی اور قواعد کی جانچ کر رہا ہے...", "مالیاتی حساب کر رہا ہے...", "اردو میں جواب تیار کر رہا ہے..."],
+  en: ["Analyzing policy & regulations...", "Calculating financial data...", "Formatting response..."],
 };
 
 function TypingIndicator({ language = "hi" }: { language?: string }) {
@@ -678,6 +699,8 @@ function TypingIndicator({ language = "hi" }: { language?: string }) {
           >
             ArthSathi
           </motion.span>
+          <span className="text-[9px] text-slate-400 dark:text-slate-500 mr-2 font-mono">Qwen3-4B · On-Device</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           <AnimatePresence mode="wait">
             <motion.span
               key={stageIndex}

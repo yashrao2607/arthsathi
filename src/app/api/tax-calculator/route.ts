@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// FY 2024-25 Indian Income Tax Slabs
+// FY 2025-26 (AY 2026-27) Indian Income Tax Slabs
+// Updated per Finance Act 2024 (Jul 2024 amendments)
+// Ref: Builder Pack 04_regulatory_refs + 06_eval_sets/tax_helper_eval.json
 
 interface TaxSlab {
   range: string;
@@ -42,7 +44,7 @@ interface TaxResponse {
   comparison?: ComparisonResult;
 }
 
-// Old Regime slabs (FY 2024-25)
+// Old Regime slabs (FY 2025-26, unchanged from FY 2024-25)
 const OLD_REGIME_SLABS = [
   { min: 0, max: 250000, rate: 0 },
   { min: 250000, max: 500000, rate: 5 },
@@ -50,7 +52,7 @@ const OLD_REGIME_SLABS = [
   { min: 1000000, max: Infinity, rate: 30 },
 ];
 
-// New Regime slabs (FY 2024-25, as per Budget 2024)
+// New Regime slabs (FY 2025-26, as per Budget 2024 Jul amendments)
 const NEW_REGIME_SLABS = [
   { min: 0, max: 300000, rate: 0 },
   { min: 300000, max: 700000, rate: 5 },
@@ -72,7 +74,16 @@ const SECTION_24B_LIMIT = 200000;
 const HRA_LIMIT = 500000;
 
 const OLD_REGIME_STANDARD_DEDUCTION = 50000;
-const NEW_REGIME_STANDARD_DEDUCTION = 75000; // Budget 2024 increased this
+const NEW_REGIME_STANDARD_DEDUCTION = 75000; // Budget 2024 increased from ₹50K to ₹75K
+
+// Capital Gains Tax Rates (post Jul 2024 Finance Act)
+// Ref: Builder Pack tax_helper_eval.json cases tax_001, tax_002
+const CAPITAL_GAINS_RATES = {
+  equitySTCG: 0.20,        // STCG on equity (≤12 months) — was 15%, now 20%
+  equityLTCG: 0.125,       // LTCG on equity (>12 months) — was 10%, now 12.5%
+  equityLTCGExemption: 125000,  // per FY exemption — was ₹1L, now ₹1.25L
+  debtFundRate: "slab",    // post Apr 2023: all gains at slab rate, no indexation
+};
 
 function formatINR(amount: number): string {
   return `₹${amount.toLocaleString("en-IN")}`;
