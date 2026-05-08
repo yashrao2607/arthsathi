@@ -232,6 +232,18 @@ mindmap
 
 ---
 
+## 📸 Screenshots
+
+| Welcome Screen | Chat Interface |
+| :---: | :---: |
+| ![Welcome](qa-final-welcome.png) | ![Chat](qa-chat-sent.png) |
+
+| EMI Calculator | Dark Mode |
+| :---: | :---: |
+| ![EMI](qa-final-emi.png) | ![Dark Mode](qa-dark-mode.png) |
+
+---
+
 ## 📜 Disclaimer
 *ArthSathi is an AI-powered advisory tool and is not affiliated with RBI, SEBI, or IRDAI. The information provided is for educational purposes only. Please consult a certified financial planner before making major investment decisions.*
 
