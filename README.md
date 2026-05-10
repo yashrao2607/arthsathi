@@ -1,7 +1,7 @@
 <div align="center">
 
 # अर्थसाथी ArthSathi
-
+ 
 ### 🇮🇳 On-Device Vernacular Financial Advisory AI
 
 **Your Privacy-First Financial Companion — Built for 140 Crore Indians**
