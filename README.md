@@ -114,7 +114,7 @@ graph TB
         BenAPI["/api/benchmark"]
     end
 
-    subgraph AI["🤖 AI Engine (z-ai-web-dev-sdk)"]
+    subgraph AI["🤖 AI Engine (Ollama)"]
         LLM["Qwen3-4B<br/>Fine-tuned LLM"]
         ASR["ASR Engine<br/>Speech Recognition"]
         TTS["TTS Engine<br/>Text-to-Speech"]
@@ -177,10 +177,10 @@ graph TB
 └────────┼────────────┼────────────┼────────────────────────────────┘
          │            │            │
 ┌────────▼────────────▼────────────▼────────────────────────────────┐
-│                 z-ai-web-dev-sdk (AI Engine)                       │
+│                 Ollama API (AI Engine)                            │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐    │
 │  │  LLM (Qwen)  │  │  TTS Engine  │  │  ASR Engine          │    │
-│  │  chat.compl. │  │  audio.tts   │  │  audio.asr           │    │
+│  │  POST /chat  │  │  POST /tts   │  │  POST /transcribe    │    │
 │  └──────────────┘  └──────────────┘  └──────────────────────┘    │
 └───────────────────────────────────────────────────────────────────┘
 ```
@@ -197,7 +197,7 @@ sequenceDiagram
     participant UI as 🖥️ Chat UI
     participant Store as 💾 Zustand Store
     participant API as ⚡ /api/chat
-    participant SDK as 🤖 z-ai-sdk
+    participant SDK as 🤖 Ollama
     participant LLM as 🧠 Qwen3-4B
 
     U->>UI: Types/Speaks query<br/>(Hindi/Tamil/etc.)
@@ -207,7 +207,7 @@ sequenceDiagram
     Store->>API: POST /api/chat<br/>{message, language, history}
     API->>API: buildSystemPrompt(language)
     API->>API: Construct messages array<br/>[system + history + query]
-    API->>SDK: chat.completions.create()
+    API->>SDK: POST /api/chat
     SDK->>LLM: Forward to model
     LLM-->>SDK: Response text
     SDK-->>API: Completion result
@@ -233,7 +233,7 @@ sequenceDiagram
     U->>Mic: Speaks question (Hindi)
     Mic->>Mic: MediaRecorder captures<br/>audio/webm blob
     Mic->>ASR: POST {audioBase64, format}
-    ASR->>ASR: zai.audio.asr.create()
+    ASR->>ASR: Process Transcription
     ASR-->>Mic: {text, confidence, language}
     Mic->>Chat: sendMessage(transcribedText)
 
@@ -244,7 +244,7 @@ sequenceDiagram
     Note over U,Speaker: ── Voice Output Phase ──
     Chat->>TTS: POST {text, voice, speed}
     TTS->>TTS: Clean markdown<br/>Split into chunks
-    TTS->>TTS: zai.audio.tts.create()
+    TTS->>TTS: Process Speech Synthesis
     TTS-->>Speaker: audio/wav buffer
     Speaker->>U: 🔊 Plays AI response
 ```
@@ -551,7 +551,7 @@ flowchart TB
         Mic["Browser Microphone<br/>getUserMedia()"]
         MR["MediaRecorder API<br/>audio/webm"]
         B64["Base64 Encoding<br/>FileReader"]
-        ASR["POST /api/transcribe<br/>z-ai-web-dev-sdk ASR"]
+        ASR["POST /api/transcribe<br/>Local ASR Engine"]
         Text["Transcribed Text<br/>{text, confidence, language}"]
         Mic --> MR --> B64 --> ASR --> Text
     end
@@ -560,7 +560,7 @@ flowchart TB
         Resp["AI Response Text"]
         Clean["Markdown Cleaning<br/>Remove formatting"]
         Split["Text Chunking<br/>≤1000 chars per chunk"]
-        TTS["POST /api/tts<br/>z-ai-web-dev-sdk TTS"]
+        TTS["POST /api/tts<br/>Local TTS Engine"]
         WAV["audio/wav Buffer"]
         Play["HTMLAudioElement<br/>playAudioFromUrl()"]
         Resp --> Clean --> Split --> TTS --> WAV --> Play
@@ -602,7 +602,7 @@ User selects "हिन्दी" (Hindi)
 ┌─────────────────────────────────────────┐
 │ TTS: LANG_TO_SPEECH["hi"] = "hi-IN"    │
 │   → utterance.lang = "hi-IN"           │
-│   → z-ai-web-dev-sdk TTS generates     │
+│   → Local TTS Engine generates         │
 │     Hindi speech audio                  │
 └─────────────────────────────────────────┘
 ```
@@ -1152,7 +1152,7 @@ Create a `.env` file in the project root:
 # Database (SQLite - already configured)
 DATABASE_URL=file:./db/custom.db
 
-# AI API Key (required for z-ai-web-dev-sdk)
+# Ollama API Configuration (optional)
 # This is auto-configured in the sandbox environment
 # For local development, you may need:
 # ZAI_API_KEY=your-api-key-here
@@ -1262,7 +1262,7 @@ graph LR
 
     subgraph API["🔌 API"]
         Routes["Next.js Route Handlers<br/>13 Endpoints"]
-        SDK["z-ai-web-dev-sdk<br/>AI Integration"]
+        SDK["Ollama API<br/>AI Integration"]
     end
 
     subgraph AI["🤖 AI Services"]
@@ -1296,7 +1296,7 @@ graph LR
 │ Markdown             │ react-markdown · remark-gfm              │
 │ Forms                │ react-hook-form · @hookform/resolvers    │
 │                      │ zod@4 · input-otp                       │
-│ AI                   │ z-ai-web-dev-sdk@0.0.17                 │
+│ AI                   │ Ollama API (Local)                      │
 │ Database             │ @prisma/client@6 · prisma@6              │
 │ Auth                 │ next-auth@4                              │
 │ Tables               │ @tanstack/react-table@8                  │
@@ -1421,7 +1421,7 @@ gantt
     section Server
     Parse request              :800, 900
     Build system prompt        :900, 1000
-    SDK initialization         :1000, 1200
+    Ollama connection          :1000, 1200
     LLM inference (Qwen3-4B)  :1200, 30000
 
     section Response
@@ -1462,7 +1462,7 @@ gantt
 │  ✅ CSS purging via Tailwind                │
 │  ✅ Route-level code splitting              │
 │  ✅ localStorage for persistence (no DB)    │
-│  ✅ ZAI singleton pattern (one SDK instance)│
+│  ✅ Ollama direct API (No SDK)             │
 │  ✅ Retry with exponential backoff          │
 │  ✅ History limited to last 6 messages      │
 │  ✅ 50 message storage cap                  │
