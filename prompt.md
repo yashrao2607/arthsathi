@@ -156,5 +156,3 @@ You are a top-tier Silicon Valley developer tasked with finalizing **ArthSathi**
 
 ## 🔒 Confidential Mission Closing
 *This project is not just a demo; it is a statement of technical capability. It demonstrates that on-device, privacy-preserving AI can compete with cloud giants while serving the local vernacular needs of the Indian population. Proceed with extreme craftsmanship.*
-
-**"Build it like you're launching on Product Hunt tomorrow."**

@@ -213,12 +213,13 @@ const FD_QUICK_RATES = [
 ];
 
 const TAX_SLABS_NEW = [
-  { range: "Up to ₹3L", rate: "Nil" },
-  { range: "₹3L - ₹7L", rate: "5%" },
-  { range: "₹7L - ₹10L", rate: "10%" },
-  { range: "₹10L - ₹12L", rate: "15%" },
-  { range: "₹12L - ₹15L", rate: "20%" },
-  { range: "Above ₹15L", rate: "30%" },
+  { range: "Up to ₹4L", rate: "Nil" },
+  { range: "₹4L - ₹8L", rate: "5%" },
+  { range: "₹8L - ₹12L", rate: "10%" },
+  { range: "₹12L - ₹16L", rate: "15%" },
+  { range: "₹16L - ₹20L", rate: "20%" },
+  { range: "₹20L - ₹24L", rate: "25%" },
+  { range: "Above ₹24L", rate: "30%" },
 ];
 
 const SCHEMES_QUICK = [
@@ -4789,7 +4790,9 @@ export default function Home() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
+      <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 relative">
+        {/* Mandala watermark */}
+        <div className="mandala-watermark" aria-hidden="true" />
         {/* ============ HEADER ============ */}
         <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 relative">
           {/* Gradient bottom border */}

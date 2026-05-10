@@ -52,14 +52,16 @@ const OLD_REGIME_SLABS = [
   { min: 1000000, max: Infinity, rate: 30 },
 ];
 
-// New Regime slabs (FY 2025-26, as per Budget 2024 Jul amendments)
+// New Regime slabs (FY 2025-26, as per Union Budget 2025 - Feb 2025)
+// Budget 2025 completely revised the slab structure
 const NEW_REGIME_SLABS = [
-  { min: 0, max: 300000, rate: 0 },
-  { min: 300000, max: 700000, rate: 5 },
-  { min: 700000, max: 1000000, rate: 10 },
-  { min: 1000000, max: 1200000, rate: 15 },
-  { min: 1200000, max: 1500000, rate: 20 },
-  { min: 1500000, max: Infinity, rate: 30 },
+  { min: 0, max: 400000, rate: 0 },
+  { min: 400000, max: 800000, rate: 5 },
+  { min: 800000, max: 1200000, rate: 10 },
+  { min: 1200000, max: 1600000, rate: 15 },
+  { min: 1600000, max: 2000000, rate: 20 },
+  { min: 2000000, max: 2400000, rate: 25 },
+  { min: 2400000, max: Infinity, rate: 30 },
 ];
 
 // Section 80C max deduction
@@ -160,8 +162,9 @@ function applyRebate87A(
   if (regime === "old" && taxableIncome <= 500000) {
     return Math.min(taxBeforeCess, 12500);
   }
-  if (regime === "new" && taxableIncome <= 700000) {
-    return Math.min(taxBeforeCess, 25000);
+  // Budget 2025: New regime rebate ₹60,000 for taxable income ≤ ₹12L
+  if (regime === "new" && taxableIncome <= 1200000) {
+    return Math.min(taxBeforeCess, 60000);
   }
   return 0;
 }
